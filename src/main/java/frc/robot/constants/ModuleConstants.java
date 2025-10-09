@@ -1,7 +1,5 @@
 package frc.robot.constants;
 
-import frc.robot.constants.NeoMotorConstants;
-
 public class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
