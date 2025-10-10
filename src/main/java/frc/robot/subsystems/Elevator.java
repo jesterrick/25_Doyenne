@@ -25,31 +25,30 @@ public class Elevator extends SubsystemBase {
   SparkMax elevatorDriveMotor2;
 
   public Elevator() {
-    this.elevatorEncoder = new Encoder(ElevatorConstants.encoderElev, ElevatorConstants.e
+    this.elevatorEncoder = new Encoder(ElevatorConstants.encoderElev, ElevatorConstants.encoderElev + 1);
     this.lowerLimitSwitch = new DigitalInput(ElevatorConstants.kLowerLimitSwitchDIOPort);  
     this.upperLimitSwitch = new DigitalInput(ElevatorConstants.kUpperLimitSwitchDIOPort);
     this.elevatorDriveMotor1 = new SparkMax(ElevatorConstants.frontElevMotor, MotorType.kBrushless);
     this.elevatorDriveMotor2 = new SparkMax(ElevatorConstants.rearElevMotor, MotorType.kBrushless);
 
     // Configure motor controllers (no encoder config needed for SparkMax)
-    SparkMaxConfig elevatorMotor1Config = new SparkMaxConfig();
-    elevatorMotor1Config.inverted(false);
-    elevatorMotor1Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
-    elevatorMotor1Config.smartCurrentLimit(40);
-    this.elevatorDriveMotor1.configure(elevatorMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    SparkMaxConfig elevatorDriveMotor1Config = new SparkMaxConfig();
+    elevatorDriveMotor1Config.inverted(false);
+    elevatorDriveMotor1Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
+    elevatorDriveMotor1Config.smartCurrentLimit(40);
+    this.elevatorDriveMotor1.configure(elevatorDriveMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SparkMaxConfig elevatorMotor2Config = new SparkMaxConfig();
-    elevatorMotor2Config.inverted(false);
-    elevatorMotor2Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
-    elevatorMotor2Config.smartCurrentLimit(40);
-    elevatorMotor2Config.follow(this.elevatorDriveMotor1);
-    this.elevatorDriveMotor2.configure(elevatorMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    SparkMaxConfig elevatorDriveMotor2Config = new SparkMaxConfig();
+    elevatorDriveMotor2Config.inverted(false);
+    elevatorDriveMotor2Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
+    elevatorDriveMotor2Config.smartCurrentLimit(40);
+    elevatorDriveMotor2Config.follow(this.elevatorDriveMotor1);
+    this.elevatorDriveMotor2.configure(elevatorDriveMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
   public void periodic() {
-      //This method will be called once per scheduler run
+    // This method will be called once per scheduler run
   }
 
   public boolean isUpperLimitSwitchActive() {
