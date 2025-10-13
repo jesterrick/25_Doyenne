@@ -30,7 +30,7 @@ public class IntakeRotator extends SubsystemBase {
 
   /** Creates a new IntakeRotator. */
   public IntakeRotator() {
-    this.m_IntakeRotateMotor = new SparkMax(IntakeRotatorConstants.kRotateAssemblyMotorId, MotorType.kBrushless);
+    this.m_IntakeRotateMotor = new SparkMax(IntakeRotatorConstants.kIntakeMotorRotatorMotor, MotorType.kBrushless);
 
      SparkMaxConfig intakeRotateConfig = new SparkMaxConfig();
     intakeRotateConfig.inverted(false);
