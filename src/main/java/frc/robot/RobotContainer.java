@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.commands.ElevatorGoToStop;
+import frc.robot.commands.OuttakeEject;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.constants.OIConstants;
@@ -97,6 +98,9 @@ public class RobotContainer {
                 .onTrue(new ElevatorGoToStop(m_elevator, 3));
         new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton4)
                 .onTrue(new ElevatorGoToStop(m_elevator, 4));
+
+        new JoystickButton(this.m_operatorJoystick, OIConstants.kOuttakeEjectButton)
+                .onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed);
     }
 
     /**
