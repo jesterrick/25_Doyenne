@@ -105,7 +105,8 @@ public class RobotContainer {
         m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
         m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
-        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed).withTimeout(3.0));
+        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed)
+        .withTimeout(OuttakeConstants.kOuttakeEjectTime));
 
         
     }
