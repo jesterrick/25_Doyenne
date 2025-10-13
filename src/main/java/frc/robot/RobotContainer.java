@@ -19,6 +19,10 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Outtake;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeRotator;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -34,9 +38,14 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Intake m_Intake = new Intake();
+  private final IntakeRotator m_IntakeRotator = new IntakeRotator();
+  private final Outtake m_outtake = new Outtake();
+  private final Elevator m_elevator = new Elevator();
 
   // The driver's controller
   Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
+  Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
