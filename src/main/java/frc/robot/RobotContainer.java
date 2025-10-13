@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ElevatorGoToStop;
 import frc.robot.commands.OuttakeEject;
 import frc.robot.constants.AutoConstants;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeRotator;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -52,6 +54,15 @@ public class RobotContainer {
     // The driver's controller
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
+
+    JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
+    JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
+    JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
+    JoystickButton m_elevator0Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton0);
+    JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
+    JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
+    JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
+    JoystickButton m_elevator4Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton4);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,19 +99,15 @@ public class RobotContainer {
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
 
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton0)
-                .onTrue(new ElevatorGoToStop(m_elevator, 0));
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton1)
-                .onTrue(new ElevatorGoToStop(m_elevator, 1));
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton2)
-                .onTrue(new ElevatorGoToStop(m_elevator, 2));
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton3)
-                .onTrue(new ElevatorGoToStop(m_elevator, 3));
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kElevatorPositionButton4)
-                .onTrue(new ElevatorGoToStop(m_elevator, 4));
+        m_elevator0Button.onTrue(new ElevatorGoToStop(m_elevator, 0));
+        m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));
+        m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
+        m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
+        m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
-        new JoystickButton(this.m_operatorJoystick, OIConstants.kOuttakeEjectButton)
-                .onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed));
+        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed).withTimeout(3.0));
+
+        
     }
 
     /**
