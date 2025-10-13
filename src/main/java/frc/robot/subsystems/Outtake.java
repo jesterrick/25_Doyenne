@@ -14,46 +14,46 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.OuttakeConstants;
 
 public class Outtake extends SubsystemBase {
-  SparkMax outtakeMotor1;
-  SparkMax outtakeMotor2;
+  SparkMax kOuttakeMotor1;
+  SparkMax kOuttakeMotor2;
   /** Creates a new Outtake. */
   public Outtake() {
-    this.outtakeMotor1 = new SparkMax(OuttakeConstants.outtakeMotor1, MotorType.kBrushless);
-    this.outtakeMotor2 = new SparkMax(OuttakeConstants.outtakeMotor2, MotorType.kBrushless);
+    this.kOuttakeMotor1 = new SparkMax(OuttakeConstants.kOuttakeMotor1, MotorType.kBrushless);
+    this.kOuttakeMotor2 = new SparkMax(OuttakeConstants.kOuttakeMotor2, MotorType.kBrushless);
 
       // Configure motor controllers (no encoder config needed for SparkMax)
-    SparkMaxConfig outtakeMotor1Config = new SparkMaxConfig();
-    outtakeMotor1Config.inverted(false);
-    outtakeMotor1Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
-    outtakeMotor1Config.smartCurrentLimit(40);
-    this.outtakeMotor1.configure(outtakeMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    SparkMaxConfig kOuttakeMotor1Config = new SparkMaxConfig();
+    kOuttakeMotor1Config.inverted(false);
+    kOuttakeMotor1Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
+    kOuttakeMotor1Config.smartCurrentLimit(40);
+    this.kOuttakeMotor1.configure(kOuttakeMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SparkMaxConfig outtakeMotor2Config = new SparkMaxConfig();
-    outtakeMotor2Config.inverted(false);
-    outtakeMotor2Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
-    outtakeMotor2Config.smartCurrentLimit(40);
-    outtakeMotor2Config.follow(this.outtakeMotor1);
-    this.outtakeMotor2.configure(outtakeMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    SparkMaxConfig kOuttakeMotor2Config = new SparkMaxConfig();
+    kOuttakeMotor2Config.inverted(false);
+    kOuttakeMotor2Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
+    kOuttakeMotor2Config.smartCurrentLimit(40);
+    kOuttakeMotor2Config.follow(this.kOuttakeMotor1);
+    this.kOuttakeMotor2.configure(kOuttakeMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   // Runs the outtake motor at the given speed
   public void runOuttake(double speed) {
-    outtakeMotor1.set(speed); // speed between -1.0 (reverse) and 1.0 (forward)
+    kOuttakeMotor1.set(speed); // speed between -1.0 (reverse) and 1.0 (forward)
 }
 
 // Stops the outtake motor
 public void stopOuttake() {
-  outtakeMotor1.stopMotor();
+  kOuttakeMotor1.stopMotor();
 }
 
 public void openOuttake()
 {
-  //outtakeMotor1.set(OuttakeConstants.motorSpeed);
+  //kOuttakeMotor1.set(OuttakeConstants.kOuttakeMotorSpeed);
 }
 
 public void closeOuttake()
 {
-  //outtakeMotor1.set(-OuttakeConstants.motorSpeed);
+  //kOuttakeMotor1.set(-OuttakeConstants.kOuttakeMotorSpeed);
 }
 
 }
