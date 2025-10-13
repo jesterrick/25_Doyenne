@@ -22,6 +22,7 @@ import frc.robot.commands.IntakeRotate;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.OuttakeEject;
 import frc.robot.commands.IntakeCenter;
+import frc.robot.commands.IntakeEject;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.DriveConstants;
 import frc.robot.constants.OIConstants;
@@ -135,6 +136,16 @@ public class RobotContainer {
                                 new IntakeCenter(this.m_Intake,
                                         IntakeConstants.kIntakeMotorSpeed)
                                         .withTimeout(IntakeConstants.kIntakeCenterDuration))));
+
+        // when this button is pressed it will run the intake motor to eject the coral
+        // and at the same time run the outtake motor to accept the coral
+        // both wiill run for the time set by kIntakeEjectDuration
+        m_intakeToOuttakeButton.onTrue(
+                new ParallelCommandGroup(
+                        new IntakeEject(this.m_Intake, IntakeConstants.kIntakeMotorSpeed)
+                                .withTimeout(IntakeConstants.kIntakeEjectDuration),
+                        new OuttakeEject(this.m_outtake, OuttakeConstants.kOuttakeMotorSpeed)
+                                .withTimeout(IntakeConstants.kIntakeEjectDuration)));
 
     }
 
