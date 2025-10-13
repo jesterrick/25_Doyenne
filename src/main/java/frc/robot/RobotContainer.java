@@ -100,7 +100,7 @@ public class RobotContainer {
                 .onTrue(new ElevatorGoToStop(m_elevator, 4));
 
         new JoystickButton(this.m_operatorJoystick, OIConstants.kOuttakeEjectButton)
-                .onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed);
+                .onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed));
     }
 
     /**
