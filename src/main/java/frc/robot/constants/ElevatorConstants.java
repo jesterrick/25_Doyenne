@@ -26,7 +26,7 @@ public class ElevatorConstants {
      public static final double kMaxVelocityMetersPerSec = 0.5; // Max velocity for motion profiling
  
      // Stops (meters from bottom)
-     public static final double[] kStopPositionsMeters = {
+     public static final double[] kStopPositions = {
          0.0, // Ground / start
          19.0, // Stop 1
          38.0, // Stop 2
