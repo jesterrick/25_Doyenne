@@ -23,7 +23,7 @@ public class ElevatorGoToStop extends Command {
   // Constructor with option to run continuously or finish at target
   public ElevatorGoToStop(Elevator elevator, int stopIndex, boolean shouldFinish) {
     this.elevator = elevator;
-    this.setpoint = ElevatorConstants.kStopPositionsMeters[stopIndex];
+    this.setpoint = ElevatorConstants.kStopPositions[stopIndex];
     this.shouldFinish = shouldFinish;
     addRequirements(this.elevator);    
   }

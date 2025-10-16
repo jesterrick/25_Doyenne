@@ -123,9 +123,9 @@ public class Elevator extends SubsystemBase {
     // Closed-loop target
     public void setTargetMeters(double meters) {
         this.targetMeters = Math.max(
-            ElevatorConstants.kStopPositionsMeters[0],
+            ElevatorConstants.kStopPositions[0],
             Math.min(
-                ElevatorConstants.kStopPositionsMeters[ElevatorConstants.kStopPositionsMeters.length - 1],
+                ElevatorConstants.kStopPositions[ElevatorConstants.kStopPositions.length - 1],
                 meters
             )
         );
