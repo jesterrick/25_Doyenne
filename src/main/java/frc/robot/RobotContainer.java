@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorGoToStop;
 import frc.robot.commands.IntakeReceive;
 import frc.robot.commands.IntakeRotate;
@@ -76,17 +77,14 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        // Configure default commands
-        m_robotDrive.setDefaultCommand(
-                // The left stick controls translation of the robot.
-                // Turning is controlled by the X axis of the right stick.
-                new RunCommand(
-                        () -> m_robotDrive.drive(
-                                -MathUtil.applyDeadband(m_driverJoystick.getX(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverJoystick.getY(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverJoystick.getZ(), OIConstants.kDriveDeadband),
-                                true),
-                        m_robotDrive));
+         // Configure default commands
+    m_robotDrive.setDefaultCommand(
+        new DriveCommand(
+            m_robotDrive,
+            () -> -MathUtil.applyDeadband(m_driverJoystick.getX(), OIConstants.kDriveDeadband),
+            () -> -MathUtil.applyDeadband(m_driverJoystick.getY(), OIConstants.kDriveDeadband),
+            () -> -MathUtil.applyDeadband(m_driverJoystick.getZ(), OIConstants.kDriveDeadband),
+            () -> true));
     }
 
     /**
