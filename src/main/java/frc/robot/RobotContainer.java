@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorGoToStop;
 import frc.robot.commands.IntakeReceive;
-import frc.robot.commands.IntakeRotate;
+import frc.robot.commands.IntakeRotateDown;
+import frc.robot.commands.IntakeRotateUp;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.OuttakeEject;
-import frc.robot.commands.IntakeCenter;
 import frc.robot.commands.IntakeEject;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.DriveConstants;
@@ -37,9 +37,11 @@ import frc.robot.subsystems.IntakeRotator;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -108,43 +110,42 @@ public class RobotContainer {
         m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
         m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
-        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeMotorSpeed)
-                .withTimeout(OuttakeConstants.kOuttakeEjectTime));
+        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeEjectSpeed)
+        .withTimeout(OuttakeConstants.kOuttakeEjectTime));
 
         // while the button is being held, the intake assembly will lower and the intake
-        // motors will run
-        // in the direction to pull the coral into the intake
-        // these actions occur at the same time
-        m_intakeReceiveButton.whileTrue(
-                new ParallelCommandGroup(
-                        new IntakeRotate(this.m_IntakeRotator, IntakeRotatorConstants.kIntakeRotatorMotorDown),
-                        new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed)));
-        // when the button is released it will perform the following tasks in the order
-        // listed
-        // 1. Stop the intake
-        // 2. Raise the intake and run the centering motor for kCenteringDuration
-        // seconds
-        // 3. Run the intake motor backwards for kReverseDuration to eject the coral
-        // 4. Stop the intake
-        m_intakeReceiveButton.onFalse(
-                new SequentialCommandGroup(
-                        new IntakeStop(this.m_Intake),
-                        new ParallelCommandGroup(
-                                new IntakeRotate(this.m_IntakeRotator, IntakeRotatorConstants.kIntakeRotatorMotorUp),
-                                new IntakeCenter(this.m_Intake,
-                                        IntakeConstants.kIntakeMotorSpeed)
-                                        .withTimeout(IntakeConstants.kIntakeCenterDuration))));
+    // motors will run
+    // in the direction to pull the coral into the intake
+    // these actions occur at the same time
+    m_intakeReceiveButton.whileTrue(
+        new ParallelCommandGroup(
+            new IntakeRotateDown(this.m_IntakeRotator),
+            new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed)));
+    // when the button is released it will perform the following tasks in the order
+    // listed
+    // 1. Stop the intake
+    // 2. Raise the intake and run the centering motor for kCenteringDuration
+    // seconds
+    // 3. Run the intake motor backwards for kReverseDuration to eject the coral
+    // 4. Stop the intake
+    m_intakeReceiveButton.onFalse(
+        new SequentialCommandGroup(
+            new IntakeStop(this.m_Intake),
+            new IntakeRotateUp(m_IntakeRotator)));
 
-        // when this button is pressed it will run the intake motor to eject the coral
-        // and at the same time run the outtake motor to accept the coral
-        // both wiill run for the time set by kIntakeEjectDuration
-        m_intakeToOuttakeButton.onTrue(
-                new ParallelCommandGroup(
-                        new IntakeEject(this.m_Intake, IntakeConstants.kIntakeMotorSpeed)
-                                .withTimeout(IntakeConstants.kIntakeEjectDuration),
-                        new OuttakeEject(this.m_outtake, OuttakeConstants.kOuttakeMotorSpeed)
-                                .withTimeout(IntakeConstants.kIntakeEjectDuration)));
-
+    // when this button is pressed it will run the intake motor to eject the coral
+    // and at the same time run the outtake motor to accept the coral
+    // both wiill run for the time set by kIntakeEjectDuration
+    m_intakeToOuttakeButton.onTrue(
+        new ParallelDeadlineGroup(
+            new SequentialCommandGroup(
+                new WaitCommand(OuttakeConstants.inOutWaitTime),
+                new IntakeEject(this.m_Intake,
+                    IntakeConstants.kIntakeEjectSpeed)
+                    .withTimeout(IntakeConstants.kIntakeEjectDuration)),
+            new OuttakeEject(this.m_outtake, OuttakeConstants.kOuttakeReceiveSpeed)
+            .withTimeout(OuttakeConstants.kOuttakeReceiveTime)
+        ));
     }
 
     /**

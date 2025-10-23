@@ -8,15 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeRotator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeRotate extends Command {
+public class IntakeRotateUp extends Command {
   IntakeRotator intakeRotatorSubsystem;
-  double rotation;
 
   /** Creates a new IntakeRotate. */
-  public IntakeRotate(IntakeRotator intRotSub, double rot) {
+  public IntakeRotateUp(IntakeRotator intRotSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intakeRotatorSubsystem = intRotSub;
-    this.rotation = rot;
     addRequirements(intakeRotatorSubsystem);
   }
 
@@ -28,7 +26,7 @@ public class IntakeRotate extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intakeRotatorSubsystem.rotateAssembly(rotation);
+    this.intakeRotatorSubsystem.moveUp();
   }
 
   // Called once the command ends or is interrupted.

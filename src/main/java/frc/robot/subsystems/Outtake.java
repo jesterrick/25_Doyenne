@@ -23,27 +23,28 @@ public class Outtake extends SubsystemBase {
 
       // Configure motor controllers (no encoder config needed for SparkMax)
     SparkMaxConfig kOuttakeMotor1Config = new SparkMaxConfig();
-    kOuttakeMotor1Config.inverted(false);
-    kOuttakeMotor1Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
+    kOuttakeMotor1Config.inverted(true);
+    kOuttakeMotor1Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
     kOuttakeMotor1Config.smartCurrentLimit(40);
     this.kOuttakeMotor1.configure(kOuttakeMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     SparkMaxConfig kOuttakeMotor2Config = new SparkMaxConfig();
     kOuttakeMotor2Config.inverted(false);
-    kOuttakeMotor2Config.idleMode(SparkMaxConfig.IdleMode.kCoast);
+    kOuttakeMotor2Config.idleMode(SparkMaxConfig.IdleMode.kBrake);
     kOuttakeMotor2Config.smartCurrentLimit(40);
-    kOuttakeMotor2Config.follow(this.kOuttakeMotor1);
     this.kOuttakeMotor2.configure(kOuttakeMotor2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   // Runs the outtake motor at the given speed
   public void runOuttake(double speed) {
-    kOuttakeMotor1.set(speed); // speed between -1.0 (reverse) and 1.0 (forward)
+    this.kOuttakeMotor1.set(speed);
+    this.kOuttakeMotor2.set(speed);
 }
 
 // Stops the outtake motor
 public void stopOuttake() {
-  kOuttakeMotor1.stopMotor();
+  this.kOuttakeMotor1.stopMotor();
+  this.kOuttakeMotor2.stopMotor();
 }
 
 public void openOuttake()
