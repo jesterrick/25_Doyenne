@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorGoToStop;
+import frc.robot.commands.ElevatorJoystick;
 import frc.robot.commands.IntakeReceive;
 import frc.robot.commands.IntakeRotateDown;
 import frc.robot.commands.IntakeRotateUp;
@@ -52,34 +53,36 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems
-    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final Intake m_Intake = new Intake();
-    private final IntakeRotator m_IntakeRotator = new IntakeRotator();
-    private final Outtake m_outtake = new Outtake();
-    private final Elevator m_elevator = new Elevator();
+  // The robot's subsystems
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Intake m_Intake = new Intake();
+  private final IntakeRotator m_IntakeRotator = new IntakeRotator();
+  private final Outtake m_outtake = new Outtake();
+  private final Elevator m_elevator = new Elevator();
 
-    // The driver's controller
-    Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
-    Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
+  // The driver's controller
+  Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
+  Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
 
-    JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
-    JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
-    JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
-    JoystickButton m_elevator0Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton0);
-    JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
-    JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
-    JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
-    JoystickButton m_elevator4Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton4);
+  JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
+  JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
+  JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
+  
+  // Buttons
+  JoystickButton m_elevator0Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton0);
+  JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
+  JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
+  JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
+  JoystickButton m_elevator4Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton4);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        // Configure the button bindings
-        configureButtonBindings();
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+  public RobotContainer() {
+    // Configure the button bindings
+    configureButtonBindings();
 
-         // Configure default commands
+    // Configure default commands
     m_robotDrive.setDefaultCommand(
         new DriveCommand(
             m_robotDrive,
@@ -87,43 +90,48 @@ public class RobotContainer {
             () -> -MathUtil.applyDeadband(m_driverJoystick.getY(), OIConstants.kDriveDeadband),
             () -> -MathUtil.applyDeadband(m_driverJoystick.getZ(), OIConstants.kDriveDeadband),
             () -> true));
-    }
+  }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-     * subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-     * passing it to a
-     * {@link JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        new JoystickButton(m_driverJoystick, Button.kR1.value)
-                .whileTrue(new RunCommand(
-                        () -> m_robotDrive.setX(),
-                        m_robotDrive));
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+   * subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+   * passing it to a
+   * {@link JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    new JoystickButton(m_driverJoystick, Button.kR1.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));
 
-        m_elevator0Button.onTrue(new ElevatorGoToStop(m_elevator, 0));
-        m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));
-        m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
-        m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
-        m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
+    m_elevator0Button.onTrue(new ElevatorGoToStop(m_elevator, 0));
+    m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));
+    m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
+    m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
+    m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
-        m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeEjectSpeed)
+    this.m_elevator.setDefaultCommand(
+        new ElevatorJoystick(
+            this.m_elevator,
+            () -> -this.m_operatorJoystick.getY()));
+
+    m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeEjectSpeed)
         .withTimeout(OuttakeConstants.kOuttakeEjectTime));
 
-        // while the button is being held, the intake assembly will lower and the intake
+    // while the button is being held, the intake assembly will lower and the intake
     // motors will run
     // in the direction to pull the coral into the intake
     // these actions occur at the same time
     m_intakeReceiveButton.whileTrue(
         new SequentialCommandGroup(
-                new ElevatorGoToStop(m_elevator, 1),
-        
-        new ParallelCommandGroup(
-            new IntakeRotateDown(this.m_IntakeRotator),
-            new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed))));
+            new ElevatorGoToStop(m_elevator, 1),
+
+            new ParallelCommandGroup(
+                new IntakeRotateDown(this.m_IntakeRotator),
+                new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed))));
     // when the button is released it will perform the following tasks in the order
     // listed
     // 1. Stop the intake
@@ -148,53 +156,52 @@ public class RobotContainer {
                     IntakeConstants.kIntakeEjectSpeed)
                     .withTimeout(IntakeConstants.kIntakeEjectDuration)),
             new OuttakeEject(this.m_outtake, OuttakeConstants.kOuttakeReceiveSpeed)
-            .withTimeout(OuttakeConstants.kOuttakeReceiveTime)
-        ));
-    }
+                .withTimeout(OuttakeConstants.kOuttakeReceiveTime)));
+  }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(DriveConstants.kDriveKinematics);
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    // Create config for trajectory
+    TrajectoryConfig config = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(DriveConstants.kDriveKinematics);
 
-        // An example trajectory to follow. All units in meters.
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+    // An example trajectory to follow. All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        config);
 
-        var thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    var thetaController = new ProfiledPIDController(
+        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                exampleTrajectory,
-                m_robotDrive::getPose, // Functional interface to feed supplier
-                DriveConstants.kDriveKinematics,
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        exampleTrajectory,
+        m_robotDrive::getPose, // Functional interface to feed supplier
+        DriveConstants.kDriveKinematics,
 
-                // Position controllers
-                new PIDController(AutoConstants.kPXController, 0, 0),
-                new PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController,
-                m_robotDrive::setModuleStates,
-                m_robotDrive);
+        // Position controllers
+        new PIDController(AutoConstants.kPXController, 0, 0),
+        new PIDController(AutoConstants.kPYController, 0, 0),
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
 
-        // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    // Reset odometry to the starting pose of the trajectory.
+    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
-        // Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-    }
+    // Run path following command, then stop at the end.
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+  }
 }
