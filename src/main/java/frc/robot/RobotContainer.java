@@ -127,8 +127,7 @@ public class RobotContainer {
     // these actions occur at the same time
     m_intakeReceiveButton.whileTrue(
         new SequentialCommandGroup(
-            new ElevatorGoToStop(m_elevator, 1),
-
+            new ElevatorGoToStop(m_elevator, 1).withTimeout(1),
             new ParallelCommandGroup(
                 new IntakeRotateDown(this.m_IntakeRotator),
                 new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed))));
@@ -142,7 +141,7 @@ public class RobotContainer {
     m_intakeReceiveButton.onFalse(
         new SequentialCommandGroup(
             new IntakeStop(this.m_Intake),
-            new IntakeRotateUp(m_IntakeRotator),
+            new IntakeRotateUp(m_IntakeRotator).withTimeout(2),
             new ElevatorGoToStop(m_elevator, 0)));
 
     // when this button is pressed it will run the intake motor to eject the coral
