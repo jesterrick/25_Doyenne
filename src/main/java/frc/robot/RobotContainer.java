@@ -71,8 +71,8 @@ public class RobotContainer {
         m_robotDrive.setDefaultCommand(
                 new DriveCommand(
                         m_robotDrive,
-                        () -> m_driverJoystick.getX(),
                         () -> m_driverJoystick.getY(),
+                        () -> m_driverJoystick.getX(),
                         () -> m_driverJoystick.getZ(),
                         () -> false));
     }
