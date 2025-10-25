@@ -12,11 +12,6 @@ public class OIConstants {
     public static final int kElevatorPositionButton3 = 2;
     public static final int kElevatorPositionButton4 = 1;
 
-    public static final int kIntakeOnButton = 1;
-    public static final int kIntakeEjectButton = 2;
-    public static final int kIntakeRotateUpButton = 3;
-    public static final int kIntakeRotateDownButton = 4;
-
     public static final int kOuttakeEjectButton = 7;
     public static final int kIntakeToOuttakeButton = 6;
     public static final int kIntakeReceiveButton = 5;
