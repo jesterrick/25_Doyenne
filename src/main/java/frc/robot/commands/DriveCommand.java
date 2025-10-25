@@ -22,18 +22,15 @@ public class DriveCommand extends Command {
   /**
    * Creates a new DriveCommand.
    *
-   * @param drive The drive subsystem to use
-   * @param xSupplier Supplier for forward/backward movement (X axis)
-   * @param ySupplier Supplier for left/right movement (Y axis)
-   * @param rotSupplier Supplier for rotation (Z axis)
-   * @param fieldRelativeSupplier Supplier for whether to use field-relative control
+   * @param drive                 The drive subsystem to use
+   * @param xSupplier             Supplier for forward/backward movement (X axis)
+   * @param ySupplier             Supplier for left/right movement (Y axis)
+   * @param rotSupplier           Supplier for rotation (Z axis)
+   * @param fieldRelativeSupplier Supplier for whether to use field-relative
+   *                              control
    */
-  public DriveCommand(
-      DriveSubsystem drive,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
-      DoubleSupplier rotSupplier,
-      BooleanSupplier fieldRelativeSupplier) {
+  public DriveCommand(DriveSubsystem drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier,
+      DoubleSupplier rotSupplier, BooleanSupplier fieldRelativeSupplier) {
     m_drive = drive;
     m_xSupplier = xSupplier;
     m_ySupplier = ySupplier;

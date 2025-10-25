@@ -99,16 +99,6 @@ public class Elevator extends SubsystemBase {
         if (this.isAtLowerLimit() && percent < -0.05)
             percent = 0;
 
-        /*
-         * / Apply acceleration limiting for smoother manual control
-         * double outputChange = percent - previousOutput;
-         * if (outputChange > MAX_OUTPUT_CHANGE_PER_CYCLE) {
-         * percent = previousOutput + MAX_OUTPUT_CHANGE_PER_CYCLE;
-         * } else if (outputChange < -MAX_OUTPUT_CHANGE_PER_CYCLE) {
-         * percent = previousOutput - MAX_OUTPUT_CHANGE_PER_CYCLE;
-         * }
-         */
-
         this.leader.set(percent);
     }
 
@@ -154,62 +144,6 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("Elevator/error", error);
         SmartDashboard.putNumber("Elevator/output", output);
     }
-
-    /*
-     * @Override
-     * public void periodic() {
-     * double current = this.getPositionMeters();
-     * double currentVelocity = this.getVelocityMetersPerSec();
-     * 
-     * this.pid.setSetpoint(this.targetMeters);
-     * 
-     * double ff = this.feedforward.calculateWithVelocities(this.pid.getSetpoint() -
-     * current, 0.0);
-     * //double ff = this.feedforward.calculate(this.pid.getSetpoint() - current,
-     * 0.0);
-     * double pidOut = this.pid.calculate(current, this.targetMeters);
-     * 
-     * double rawOutput = pidOut + ff;
-     * 
-     * // Method 1: Limit the maximum closed-loop output
-     * double output = Math.max(-ElevatorConstants.kMaxClosedLoopOutput,
-     * Math.min(ElevatorConstants.kMaxClosedLoopOutput, rawOutput));
-     * 
-     * // Method 2: Velocity-based limiting
-     * if (Math.abs(currentVelocity) > ElevatorConstants.kMaxVelocityMetersPerSec) {
-     * // If going too fast, reduce output in that direction
-     * if (currentVelocity > 0 && output > 0) {
-     * output = Math.min(output, 0.1); // Allow only small positive output
-     * } else if (currentVelocity < 0 && output < 0) {
-     * output = Math.max(output, -0.1); // Allow only small negative output
-     * }
-     * }
-     * 
-     * // Method 3: Acceleration limiting for closed loop
-     * double outputChange = output - previousOutput;
-     * if (outputChange > MAX_OUTPUT_CHANGE_PER_CYCLE) {
-     * output = previousOutput + MAX_OUTPUT_CHANGE_PER_CYCLE;
-     * } else if (outputChange < -MAX_OUTPUT_CHANGE_PER_CYCLE) {
-     * output = previousOutput - MAX_OUTPUT_CHANGE_PER_CYCLE;
-     * }
-     * 
-     * // Safety limits
-     * if (this.isAtUpperLimit() && output > 0.05) output = 0;
-     * if (this.isAtLowerLimit() && output < -0.05) output = 0;
-     * 
-     * this.leader.set(output);
-     * previousOutput = output;
-     * 
-     * SmartDashboard.putNumber("Elevator/pos", current);
-     * SmartDashboard.putNumber("Elevator/target", this.targetMeters);
-     * SmartDashboard.putNumber("Elevator/velocity", currentVelocity);
-     * SmartDashboard.putNumber("Elevator/rawOutput", rawOutput);
-     * SmartDashboard.putNumber("Elevator/output", output);
-     * SmartDashboard.putBoolean("Elevator/lowerLimit", this.isAtLowerLimit());
-     * SmartDashboard.putBoolean("Elevator/upperLimit", this.isAtUpperLimit());
-     * SmartDashboard.putBoolean("Elevator/atTarget", this.pid.atSetpoint());
-     * }
-     */
 
     // Check if elevator is at target position
     public boolean atTarget() {
