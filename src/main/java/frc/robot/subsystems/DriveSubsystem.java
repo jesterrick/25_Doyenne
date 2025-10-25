@@ -14,8 +14,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -41,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final AHRS m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
 
   // Odometry class for tracking robot pose
@@ -59,6 +65,38 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
+    // Justin's code for automation builder setup
+    // need to revisit to better understand what its doing
+    // ✅ FIX: Ensure RobotConfig is properly initialized
+    RobotConfig config;// ✅ FIX: Corrected method for loading from GUI;
+    try {
+      config = RobotConfig.fromGUISettings(); // ✅ FIX: Corrected method for loading from GUI
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      config = new RobotConfig(3, 3, null, null);
+
+    }
+
+    // ✅ FIX: Corrected `AutoBuilder.configure()` call
+    AutoBuilder.configure(
+        this::getPose, // ✅ Robot pose supplier
+        this::resetOdometry, // ✅ Reset odometry function
+        this::getChassisSpeeds, // ✅ ChassisSpeeds supplier (MUST BE ROBOT RELATIVE)
+        this::driveWithChassisSpeeds, // ✅ Drive function
+        new PPHolonomicDriveController( // ✅ Corrected PathPlanner Holonomic Controller
+            new PIDConstants(5.0, 0.0, 0.0), // ✅ Translation PID
+            new PIDConstants(5.0, 0.0, 0.0) // ✅ Rotation PID
+        ),
+        config, // ✅ FIX: Uses correct RobotConfig
+        () -> DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red, // ✅ FIX: Mirrors for Red Alliance
+        this // ✅ Reference to this subsystem (sets command requirements)
+    );
+
+    System.out.println("✅ AutoBuilder successfully configured.");
+
   }
 
   @Override
@@ -181,5 +219,27 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public ChassisSpeeds getChassisSpeeds() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState());
+  }
+
+  public void driveWithChassisSpeeds(ChassisSpeeds speeds) {
+    // Convert ChassisSpeeds to SwerveModuleStates
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+
+    // Normalize wheel speeds to be within max speed limits
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+    // Set the desired states to each swerve module
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 }
