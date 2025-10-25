@@ -70,8 +70,6 @@ public class RobotContainer {
     JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
     JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
     JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
-    JoystickButton m_elevator4Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton4);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -104,7 +102,6 @@ public class RobotContainer {
     m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));
     m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
     m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
-    m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
     this.m_elevator.setDefaultCommand(
         new ElevatorJoystick(

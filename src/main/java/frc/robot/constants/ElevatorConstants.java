@@ -21,7 +21,7 @@ public class ElevatorConstants {
     public static final double kMinHeightMeters = 0.0;
 
     // Speed limits
-    public static final double kMaxElevatorSpeed = 0.5;
+    public static final double kMaxElevatorSpeed = 0.7;
     public static final double kMaxClosedLoopOutput = 0.5;
     public static final double kMaxVelocityMetersPerSec = 0.5;
 
@@ -29,9 +29,8 @@ public class ElevatorConstants {
     public static final double[] kStopPositions = {
             0.0, // Ground / start
             14.0, // Stop 1
-            44.0, // Stop 2
-            62.0, // Stop 3
-            80.0 // Stop 4
+            23.0, // Stop 2
+            53.0, // Stop 3
     };
 
     // PID Constants
