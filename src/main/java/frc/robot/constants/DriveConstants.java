@@ -39,4 +39,7 @@ public class DriveConstants {
     public static final int kRearRightTurningCanId = 5;
 
     public static final boolean kGyroReversed = false;
+
+    public static final double kElevatorSafeHeight = 25.0;
+    public static final double kElevatorSpeedReductionFactor = 0.4;
 }

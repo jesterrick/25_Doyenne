@@ -4,6 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
+import com.pathplanner.lib.util.FileVersionException;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
@@ -24,7 +31,12 @@ import frc.robot.subsystems.Outtake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeRotator;
 import frc.robot.subsystems.Elevator;
+
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -39,12 +51,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
     // The robot's subsystems
-    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final Intake m_Intake = new Intake();
     private final IntakeRotator m_IntakeRotator = new IntakeRotator();
     private final Outtake m_outtake = new Outtake();
     private final Elevator m_elevator = new Elevator();
-
+    public DriveSubsystem m_robotDrive = new DriveSubsystem(m_elevator);
+    
     // The driver's controller
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
@@ -58,8 +70,6 @@ public class RobotContainer {
     JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
     JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
     JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
-    JoystickButton m_elevator4Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton4);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -92,7 +102,6 @@ public class RobotContainer {
     m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));
     m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
     m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
-    m_elevator4Button.onTrue(new ElevatorGoToStop(m_elevator, 4));
 
     this.m_elevator.setDefaultCommand(
         new ElevatorJoystick(
@@ -143,7 +152,39 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return null;
+        PathPlannerPath path;
+    
+        try {
+            // Attempt to load the PathPlanner path
+            path = PathPlannerPath.fromPathFile("Example Path");
+        } catch (IOException | ParseException | FileVersionException e) {
+            // Print error message to console
+            System.err.println("🚨 Error: Failed to load PathPlanner path! Reason: " + e.getMessage());
+            e.printStackTrace();  // Print full error for debugging
+            
+            // Return a safe fallback command (e.g., do nothing)
+            return new Command() {
+                @Override
+                public void initialize() {
+                    System.out.println("⚠️ Running fallback autonomous: No path loaded.");
+                }
+            };
+        }
+    
+        // Get the first waypoint's position
+        Translation2d startPosition = path.getPoint(0).position;
+    
+        // Convert it to a full Pose2d by adding a default rotation
+        Pose2d startingPose = new Pose2d(startPosition, new Rotation2d(0));
+    
+        // Reset odometry to match the path's starting pose
+        m_robotDrive.resetOdometry(startingPose);
+    
+        // Use AutoBuilder to follow the path
+        Command pathCommand = AutoBuilder.followPath(path);
+    
+        // Run the command and stop at the end
+        return AutoBuilder.followPath(path)
+            .andThen(new InstantCommand(() -> m_robotDrive.drive(0,0,0,false), m_robotDrive)); // ✅ Ensures the robot stops at the end
     }
 }
