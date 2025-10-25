@@ -50,6 +50,8 @@ public class DriveSubsystem extends SubsystemBase {
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private final AHRS m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
 
+  Elevator m_elevator;
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -62,16 +64,17 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem(Elevator elevator) {
+    this.m_elevator = elevator;
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
 
     // Justin's code for automation builder setup
     // need to revisit to better understand what its doing
-    // ✅ FIX: Ensure RobotConfig is properly initialized
-    RobotConfig config;// ✅ FIX: Corrected method for loading from GUI;
+    //  FIX: Ensure RobotConfig is properly initialized
+    RobotConfig config;//  FIX: Corrected method for loading from GUI;
     try {
-      config = RobotConfig.fromGUISettings(); // ✅ FIX: Corrected method for loading from GUI
+      config = RobotConfig.fromGUISettings(); //  FIX: Corrected method for loading from GUI
     } catch (Exception e) {
       e.printStackTrace();
 
@@ -79,23 +82,23 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    // ✅ FIX: Corrected `AutoBuilder.configure()` call
+    //  FIX: Corrected `AutoBuilder.configure()` call
     AutoBuilder.configure(
-        this::getPose, // ✅ Robot pose supplier
-        this::resetOdometry, // ✅ Reset odometry function
-        this::getChassisSpeeds, // ✅ ChassisSpeeds supplier (MUST BE ROBOT RELATIVE)
-        this::driveWithChassisSpeeds, // ✅ Drive function
-        new PPHolonomicDriveController( // ✅ Corrected PathPlanner Holonomic Controller
-            new PIDConstants(5.0, 0.0, 0.0), // ✅ Translation PID
-            new PIDConstants(5.0, 0.0, 0.0) // ✅ Rotation PID
+        this::getPose, //  Robot pose supplier
+        this::resetOdometry, //  Reset odometry function
+        this::getChassisSpeeds, //  ChassisSpeeds supplier (MUST BE ROBOT RELATIVE)
+        this::driveWithChassisSpeeds, //  Drive function
+        new PPHolonomicDriveController( //  Corrected PathPlanner Holonomic Controller
+            new PIDConstants(5.0, 0.0, 0.0), //  Translation PID
+            new PIDConstants(5.0, 0.0, 0.0) //  Rotation PID
         ),
-        config, // ✅ FIX: Uses correct RobotConfig
+        config, //  FIX: Uses correct RobotConfig
         () -> DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red, // ✅ FIX: Mirrors for Red Alliance
-        this // ✅ Reference to this subsystem (sets command requirements)
+            && DriverStation.getAlliance().get() == DriverStation.Alliance.Red, //  FIX: Mirrors for Red Alliance
+        this //  Reference to this subsystem (sets command requirements)
     );
 
-    System.out.println("✅ AutoBuilder successfully configured.");
+    System.out.println(" AutoBuilder successfully configured.");
 
   }
 
@@ -141,7 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
+   * @param xSpeed        Speed of the robot in the x direction (forward).  
    * @param ySpeed        Speed of the robot in the y direction (sideways).
    * @param rot           Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the
@@ -149,9 +152,17 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
+    double elevator_height = this.m_elevator.getPositionMeters();
+
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
+
+    if (elevator_height > DriveConstants.kElevatorSafeHeight) {
+      xSpeedDelivered *= DriveConstants.kElevatorSpeedReductionFactor;
+      ySpeedDelivered *= DriveConstants.kElevatorSpeedReductionFactor;
+      rotDelivered *= DriveConstants.kElevatorSpeedReductionFactor;
+    }
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative

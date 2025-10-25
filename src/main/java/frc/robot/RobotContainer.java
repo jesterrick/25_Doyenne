@@ -51,12 +51,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
     // The robot's subsystems
-    public DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final Intake m_Intake = new Intake();
     private final IntakeRotator m_IntakeRotator = new IntakeRotator();
     private final Outtake m_outtake = new Outtake();
     private final Elevator m_elevator = new Elevator();
-
+    public DriveSubsystem m_robotDrive = new DriveSubsystem(m_elevator);
+    
     // The driver's controller
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
