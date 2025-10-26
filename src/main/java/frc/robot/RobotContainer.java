@@ -19,6 +19,7 @@ import frc.robot.commands.OuttakeReceive;
 import frc.robot.commands.IntakeEject;
 import frc.robot.constants.OIConstants;
 import frc.robot.constants.OuttakeConstants;
+import frc.robot.constants.DriveConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Outtake;
@@ -143,6 +144,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new DriveStraight(m_robotDrive, 0.3).withTimeout(3.0);
+        return new DriveStraight(m_robotDrive, DriveConstants.kMaxAutonomousSpeed).withTimeout(3.0);
     }
 }
