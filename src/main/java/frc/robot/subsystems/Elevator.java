@@ -132,7 +132,7 @@ public class Elevator extends SubsystemBase {
       } else if (error < -1.0) {
         output = -0.1; // Slow down as we approach
       } else {
-        output = 0.05; // Hold position (fighting gravity)
+        output = 0.08; // Hold position (fighting gravity)
       }
     }
     // Safety limits
