@@ -55,6 +55,7 @@ public class RobotContainer {
     JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
     JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
     JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
+    JoystickButton m_intakeReloadButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReloadButton);
 
     // Buttons
     JoystickButton m_elevator0Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton0);
@@ -102,6 +103,10 @@ public class RobotContainer {
 
         m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeEjectSpeed)
                 .withTimeout(OuttakeConstants.kOuttakeEjectTime));
+                
+        m_intakeReloadButton.onTrue(
+                new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed)
+                        .withTimeout(IntakeConstants.kIntakeReloadTime));
 
         // while the button is being held
         // 1. Lift the elevator so its out of the way

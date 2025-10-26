@@ -14,4 +14,5 @@ public class OIConstants {
     public static final int kOuttakeEjectButton = 7;
     public static final int kIntakeToOuttakeButton = 6;
     public static final int kIntakeReceiveButton = 5;
+    public static final int kIntakeReloadButton = 8;
 }
