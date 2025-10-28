@@ -26,6 +26,7 @@ import frc.robot.subsystems.Outtake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeRotator;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Limelight;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -47,6 +48,7 @@ public class RobotContainer {
     private final Outtake m_outtake = new Outtake();
     private final Elevator m_elevator = new Elevator();
     public DriveSubsystem m_robotDrive = new DriveSubsystem(m_elevator);
+    public final Limelight m_limelight = new Limelight();
 
     // The driver's controller
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
