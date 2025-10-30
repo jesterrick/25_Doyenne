@@ -215,4 +215,8 @@ public DriveSubsystem(Elevator elevator) {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
+
+  public void stop() {
+    drive(0, 0, 0, false);
+}
 }

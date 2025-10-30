@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.CenterOnPostCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.ElevatorGoToStop;
@@ -54,6 +55,8 @@ public class RobotContainer {
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
 
+    JoystickButton m_centerOnPostButton = new JoystickButton(m_driverJoystick, OIConstants.kCenterOnPostButton);
+
     JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
     JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
     JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
@@ -92,6 +95,8 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        m_centerOnPostButton.onTrue(new CenterOnPostCommand(m_limelight, m_robotDrive));
 
         m_elevator0Button.onTrue(new ElevatorGoToStop(m_elevator, 0));
         m_elevator1Button.onTrue(new ElevatorGoToStop(m_elevator, 1));

@@ -37,7 +37,7 @@ public class DriveStraight extends Command {
   @Override
   public void end(boolean interrupted) {
     // Stop the robot when command ends
-    m_drive.drive(0, 0, 0, false);
+    m_drive.stop();
   }
 
   @Override

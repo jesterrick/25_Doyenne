@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     timer.reset();
     timer.start();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand().andThen(
-        new RunCommand(() -> m_robotContainer.m_robotDrive.drive(0, 0, 0, true), m_robotContainer.m_robotDrive));
+        new RunCommand(() -> m_robotContainer.m_robotDrive.stop(), m_robotContainer.m_robotDrive));
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
