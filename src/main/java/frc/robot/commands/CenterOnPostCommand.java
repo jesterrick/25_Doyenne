@@ -47,12 +47,7 @@ public class CenterOnPostCommand extends Command {
       drivePower = Math.max(-VisionConstants.CENTER_MAX_POWER,
           Math.min(VisionConstants.CENTER_MAX_POWER, drivePower));
 
-      // Drive - adjust based on your drivetrain type
-      // For mecanum/swerve: strafe sideways
-      m_driveSubsystem.drive(drivePower, 0, 0, false); // (forward, strafe, rotate)
-
-      // For tank/differential: turn in place
-      // m_drive.arcadeDrive(0, strafePower);
+      m_driveSubsystem.drive(drivePower, 0, 0, false);
 
     } else {
       m_driveSubsystem.stop(); // Stop if no target
