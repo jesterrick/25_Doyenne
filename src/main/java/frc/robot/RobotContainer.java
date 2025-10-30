@@ -115,7 +115,7 @@ public class RobotContainer {
         // 2. turn on the intake while lowering the intake at the same time
         m_intakeReceiveButton.whileTrue(
                 new SequentialCommandGroup(
-                        new ElevatorGoToStop(m_elevator, 1).withTimeout(1),
+                        new ElevatorGoToStop(m_elevator, 1).withTimeout(0.05),
                         new ParallelCommandGroup(
                                 new IntakeRotateDown(this.m_IntakeRotator),
                                 new IntakeReceive(this.m_Intake, IntakeConstants.kIntakeMotorSpeed))));
