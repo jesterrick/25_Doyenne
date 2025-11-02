@@ -7,7 +7,7 @@ public class OuttakeConstants {
     public static final double kOuttakeEjectSpeed = 0.2;
     public static final double kOuttakeReceiveSpeed = 0.05;
     public static final double kOuttakeEjectTime = 1.5;
-    public static final double kOuttakeReceiveTime = 0.5;
+    public static final double kOuttakeReceiveTime = 0.4;
     public static final double inOutWaitTime = 0.2;
 
 }
