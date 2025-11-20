@@ -151,6 +151,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new DriveStraight(m_robotDrive, DriveConstants.kMaxAutonomousSpeed).withTimeout(3.0);
+        return new DriveStraight(m_robotDrive, DriveConstants.kMaxAutonomousSpeed).withTimeout(1.0);
     }
 }
