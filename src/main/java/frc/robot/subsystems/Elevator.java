@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase {
     double current = this.getPositionMeters();
     double error = this.targetMeters - current;
 
-    double output = 0.0;
+    double output = ElevatorConstants.kMaxElevatorSpeed;
 
     if (this.targetMeters == ElevatorConstants.kStopPositions[0] && current < 5.0 ) 
     {
@@ -124,13 +124,13 @@ public class Elevator extends SubsystemBase {
     } else {
       // Three-speed control: fast, slow, hold
       if (error > 3.0) {
-        output = 0.3; // Move up fast when far away
-      } else if (error > 1.0) {
-        output = 0.15; // Slow down as we approach
+        output = output * 1.0; // Move up fast when far away
+      } else if (error > 0.5) {
+        output = output * 0.4; // Slow down as we approach
       } else if (error < -3.0) {
-        output = -0.2; // Move down fast when far away
+        output = output * -0.8; // Move down fast when far away
       } else if (error < -1.0) {
-        output = -0.1; // Slow down as we approach
+        output = output * -0.2; // Slow down as we approach
       } else {
         output = 0.08; // Hold position (fighting gravity)
       }

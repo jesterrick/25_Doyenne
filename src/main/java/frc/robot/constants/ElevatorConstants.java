@@ -21,7 +21,7 @@ public class ElevatorConstants {
     public static final double kMinHeightMeters = 0.0;
 
     // Speed limits
-    public static final double kMaxElevatorSpeed = 0.7;
+    public static final double kMaxElevatorSpeed = 0.3;
     public static final double kMaxClosedLoopOutput = 0.5;
     public static final double kMaxVelocityMetersPerSec = 0.5;
 

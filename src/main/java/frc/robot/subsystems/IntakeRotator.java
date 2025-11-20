@@ -44,17 +44,17 @@ public class IntakeRotator extends SubsystemBase {
     double currentPos = this.m_RotateMotorEncoder.getPosition();
     double error = targetPosition - currentPos;
     
-    double output = 0.0;
+    double output = IntakeRotatorConstants.kIntakeRotatorMotorSpeed;
     
     // Simple bang-bang control with slow zone
     if (error > 5.0) {
-      output = 0.4; // Move down fast
+      output = output * 1.0; // Move down fast
     } else if (error > 1.0) {
-      output = 0.15; // Slow down near target
+      output = output * 0.35; // Slow down near target
     } else if (error < -5.0) {
-      output = -0.4; // Move up fast
+      output = output * -1.0; // Move up fast
     } else if (error < -1.0) {
-      output = -0.15; // Slow down near target
+      output = output * -0.35; // Slow down near target
     } else {
       output = 0.0; // At target, stop (brake mode will hold it)
     }
