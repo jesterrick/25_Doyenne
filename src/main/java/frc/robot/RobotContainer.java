@@ -29,11 +29,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -143,6 +145,10 @@ public class RobotContainer {
                                 new IntakeEject(this.m_Intake,
                                         IntakeConstants.kIntakeEjectSpeed)
                                         .withTimeout(IntakeConstants.kIntakeEjectDuration))));
+        
+        new Trigger(() -> m_limelight.isTargetVisible())
+                .onTrue(new InstantCommand(() -> m_outtake.runOuttake(OuttakeConstants.kOuttakeEjectSpeed)))
+                .onFalse(new InstantCommand(() -> m_outtake.stopOuttake()));
     }
 
     /**

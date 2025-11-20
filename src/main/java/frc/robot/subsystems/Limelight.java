@@ -21,6 +21,10 @@ public class Limelight extends SubsystemBase {
     CameraServer.startAutomaticCapture(limelightCamera);
   }
 
+  public boolean isTargetVisible() {
+    return limelightTable.getEntry("tv").getDouble(0) == 1.0;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
