@@ -60,8 +60,16 @@ public class RobotContainer {
     JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeToOuttakeButton);
     JoystickButton m_outtakeEjectButton = new JoystickButton(m_driverJoystick, OIConstants.kOuttakeEjectButton);
     JoystickButton m_intakeReloadButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeReloadButton);
+    JoystickButton m_intakeReceiveButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeReceiveButton);
+    JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeToOuttakeButton);
+    JoystickButton m_outtakeEjectButton = new JoystickButton(m_driverJoystick, OIConstants.kOuttakeEjectButton);
+    JoystickButton m_intakeReloadButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeReloadButton);
 
     // Buttons
+    JoystickButton m_elevator0Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton0);
+    JoystickButton m_elevator1Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton1);
+    JoystickButton m_elevator2Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton2);
+    JoystickButton m_elevator3Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton3);
     JoystickButton m_elevator0Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton0);
     JoystickButton m_elevator1Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton1);
     JoystickButton m_elevator2Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton2);
