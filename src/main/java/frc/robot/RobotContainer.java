@@ -54,18 +54,18 @@ public class RobotContainer {
 
     // The driver's controller
     Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
-    Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
+    //Joystick m_operatorJoystick = new Joystick(OIConstants.kOperatorJoystickPort);
 
-    JoystickButton m_intakeReceiveButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReceiveButton);
-    JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeToOuttakeButton);
-    JoystickButton m_outtakeEjectButton = new JoystickButton(m_operatorJoystick, OIConstants.kOuttakeEjectButton);
-    JoystickButton m_intakeReloadButton = new JoystickButton(m_operatorJoystick, OIConstants.kIntakeReloadButton);
+    JoystickButton m_intakeReceiveButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeReceiveButton);
+    JoystickButton m_intakeToOuttakeButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeToOuttakeButton);
+    JoystickButton m_outtakeEjectButton = new JoystickButton(m_driverJoystick, OIConstants.kOuttakeEjectButton);
+    JoystickButton m_intakeReloadButton = new JoystickButton(m_driverJoystick, OIConstants.kIntakeReloadButton);
 
     // Buttons
-    JoystickButton m_elevator0Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton0);
-    JoystickButton m_elevator1Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton1);
-    JoystickButton m_elevator2Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton2);
-    JoystickButton m_elevator3Button = new JoystickButton(m_operatorJoystick, OIConstants.kElevatorPositionButton3);
+    JoystickButton m_elevator0Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton0);
+    JoystickButton m_elevator1Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton1);
+    JoystickButton m_elevator2Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton2);
+    JoystickButton m_elevator3Button = new JoystickButton(m_driverJoystick, OIConstants.kElevatorPositionButton3);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -100,10 +100,10 @@ public class RobotContainer {
         m_elevator2Button.onTrue(new ElevatorGoToStop(m_elevator, 2));
         m_elevator3Button.onTrue(new ElevatorGoToStop(m_elevator, 3));
 
-        this.m_elevator.setDefaultCommand(
+        /*this.m_elevator.setDefaultCommand(
                 new ElevatorJoystick(
                         this.m_elevator,
-                        () -> -this.m_operatorJoystick.getY()));
+                        () -> -this.m_operatorJoystick.getY()));*/
 
         m_outtakeEjectButton.onTrue(new OuttakeEject(m_outtake, OuttakeConstants.kOuttakeEjectSpeed)
                 .withTimeout(OuttakeConstants.kOuttakeEjectTime));
@@ -145,10 +145,15 @@ public class RobotContainer {
                                 new IntakeEject(this.m_Intake,
                                         IntakeConstants.kIntakeEjectSpeed)
                                         .withTimeout(IntakeConstants.kIntakeEjectDuration))));
-        
-        new Trigger(() -> m_limelight.isTargetVisible())
+        /*/
+        new Trigger(() -> m_limelight.getPipeline() == 1 && m_limelight.isTargetVisible())
                 .onTrue(new InstantCommand(() -> m_outtake.runOuttake(OuttakeConstants.kOuttakeEjectSpeed)))
                 .onFalse(new InstantCommand(() -> m_outtake.stopOuttake()));
+
+        new Trigger(() -> m_limelight.getPipeline() == 2 && m_limelight.isTargetVisible())
+                .onTrue(new InstantCommand(() -> m_Intake.engageIntake(IntakeConstants.kIntakeMotorSpeed)))
+                .onFalse(new InstantCommand(() -> m_Intake.stopIntake()));
+                */
     }
 
     /**

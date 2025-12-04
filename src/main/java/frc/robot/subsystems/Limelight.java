@@ -25,6 +25,10 @@ public class Limelight extends SubsystemBase {
     return limelightTable.getEntry("tv").getDouble(0) == 1.0;
   }
 
+  public int getPipeline() {
+    return (int) limelightTable.getEntry("getpipe").getDouble(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
